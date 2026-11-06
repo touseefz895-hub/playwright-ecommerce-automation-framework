@@ -17,7 +17,7 @@ export class LoginPage {
 
    }
    async navigateToLoginPage() {
-    await this.page.goto('https://www.saucedemo.com/');
+    await this.page.goto('/');
    }
 
    async fillUsername(username: string) {
