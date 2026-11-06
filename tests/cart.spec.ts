@@ -17,7 +17,7 @@ test.describe('Shopping Cart Module', () => {
         await loginPage.login('standard_user', 'secret_sauce');
     });
 
-    test.only('CART-001: Verify the initial cart is empty', async () => {
+    test('CART-001: Verify the initial cart is empty', async () => {
         await cartPage.openCart();
 
         await expect(cartPage.cartTitle).toHaveText('Your Cart');
