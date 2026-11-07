@@ -9,6 +9,7 @@ export class CartPage {
     readonly cartItemNames: Locator;
     readonly cartItemPrices: Locator;
     readonly cartItemQuantities: Locator;
+    readonly checkoutButton: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -19,9 +20,16 @@ export class CartPage {
         this.cartItemNames = this.cartItems.locator('[data-test="inventory-item-name"]');
         this. cartItemPrices = this.cartItems.locator('[data-test="inventory-item-price"]');
         this.cartItemQuantities = this.cartItems.locator('.cart_quantity');
+        this.checkoutButton = page.locator('[data-test="checkout"]');
     }
 
     async openCart() {
         await this.cartLink.click();
     }
+
+   async proceedToCheckout() {
+        await this.checkoutButton.click();
+    }
+
+
 }
