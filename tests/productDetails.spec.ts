@@ -1,15 +1,11 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/loginPage';
-import { ProductsPage } from '../pages/productsPage';
-import { ProductDetailsPage } from '../pages/productDetailsPage';
+import {test, expect} from './fixture';
 
-test('PROD-007: Verify product details match the selected product', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const productsPage = new ProductsPage(page);
-    const productDetailsPage = new ProductDetailsPage(page);
+test.beforeEach(async ({ authenticatedPage }) => {
+    await expect(authenticatedPage).toHaveURL(/inventory\.html$/);
+});
 
-    await loginPage.navigateToLoginPage();
-    await loginPage.login('standard_user', 'secret_sauce');
+test('PROD-007: Verify product details match the selected product', async ({ productsPage, productDetailPage, page }) => {
+    
 
     await expect(productsPage.productNames.first()).toBeVisible();
     await expect(productsPage.productPrices.first()).toBeVisible();
@@ -23,10 +19,10 @@ test('PROD-007: Verify product details match the selected product', async ({ pag
     await productsPage.clickFirstProduct();
     await expect(page).toHaveURL(/inventory-item\.html\?id=\d+/);
 
-    await expect(productDetailsPage.productName).toHaveText(expectedName);
-    await expect(productDetailsPage.productPrice).toHaveText(expectedPrice);
+    await expect(productDetailPage.productName).toHaveText(expectedName);
+    await expect(productDetailPage.productPrice).toHaveText(expectedPrice);
 
-    await productDetailsPage.backToProducts();
+    await productDetailPage.backToProducts();
 
     await expect(productsPage.productTitle).toHaveText('Products');
     await expect(productsPage.productNames.first()).toHaveText(expectedName);

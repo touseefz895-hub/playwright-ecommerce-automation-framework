@@ -30,3 +30,4 @@ export const checkoutValidationCases = [
         expectedErrorMessage: 'Error: Postal Code is required',
     },
 ] as const;
+
