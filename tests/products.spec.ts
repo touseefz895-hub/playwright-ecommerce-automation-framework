@@ -1,20 +1,12 @@
 
-import { test, expect } from '@playwright/test';
-import { ProductsPage } from '../pages/productsPage';
-import { LoginPage } from '../pages/loginPage';
+import { test, expect } from './fixture';
 
-test.describe('Product Module', () => {
-    let productsPage: ProductsPage;
 
-    test.beforeEach(async ({ page }) => {
-        const loginPage = new LoginPage(page);
-        productsPage = new ProductsPage(page);
+test.beforeEach(async ({ authenticatedPage }) => {
+    await expect(authenticatedPage).toHaveURL(/inventory\.html$/);
+});
 
-        await loginPage.navigateToLoginPage();
-        await loginPage.login('standard_user', 'secret_sauce');
-    });
-
-    test('PROD-001: Verify six products are listed after successful login', async () => {
+    test('PROD-001: Verify six products are listed after successful login', async ({productsPage}) => {
         await expect(productsPage.productNames).toHaveCount(6);
 
         const productNames = await productsPage.productNames.allTextContents();
@@ -28,7 +20,7 @@ test.describe('Product Module', () => {
         }
     });
 
-    test('PROD-002: Verify all products display valid prices', async () => {
+    test('PROD-002: Verify all products display valid prices', async ({productsPage}) => {
         await expect(productsPage.productNames).toHaveCount(6);
 
         const productPrices = await productsPage.productPrices.allTextContents();
@@ -42,7 +34,7 @@ test.describe('Product Module', () => {
         }
     });
 
-    test('PROD-003: Verify products are sorted by name A to Z', async () => {
+    test('PROD-003: Verify products are sorted by name A to Z', async ({productsPage}) => {
         await expect(productsPage.productNames).toHaveCount(6);
 
         await productsPage.sortProducts('za');
@@ -54,7 +46,7 @@ test.describe('Product Module', () => {
         expect(actualNames).toEqual(expectedNames);
     });
 
-    test('PROD-004: Verify products are sorted by Name Z to A', async () => {
+    test('PROD-004: Verify products are sorted by Name Z to A', async ({productsPage}) => {
         await expect(productsPage.productNames).toHaveCount(6);
         await productsPage.sortProducts('za');
 
@@ -63,7 +55,7 @@ test.describe('Product Module', () => {
         expect(actualNames).toEqual(expectedNames);
     });
 
-    test('PROD-005: Verify product prices are sorted from Low to High', async () => {
+    test('PROD-005: Verify product prices are sorted from Low to High', async ({productsPage}) => {
         await expect(productsPage.productNames).toHaveCount(6);
         await productsPage.sortProducts('lohi');
 
@@ -82,7 +74,7 @@ test.describe('Product Module', () => {
         expect(actualPrices).toEqual(expectedPrices);
     });
 
-    test('PROD-006: Verify product prices are sorted from High to Low', async () => {
+    test('PROD-006: Verify product prices are sorted from High to Low', async ({productsPage}) => {
         await expect(productsPage.productNames).toHaveCount(6);
         await productsPage.sortProducts('hilo');
 
@@ -100,4 +92,3 @@ test.describe('Product Module', () => {
 
         expect(actualPrices).toEqual(expectedPrices);
     });
-});
